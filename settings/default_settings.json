@@ -1,0 +1,17 @@
+{
+	"base_folder": {
+		"default": "/",
+		"question": "Base folder (example: src/app/)",
+		"type": "input"
+	},
+	"test_folder": {
+		"default": true,
+		"question": "Create test folder",
+		"type": "bool"
+	},
+	"template_path": {
+		"default": "",
+		"question": "Please write down the templates file absolute path",
+		"type": "input"
+	}
+}

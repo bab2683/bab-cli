@@ -1,0 +1,21 @@
+{
+	"name": "custom-cli",
+	"bin": {
+		"babcli": "./index.js"
+	},
+	"version": "1.0.0",
+	"description": "cli for creating boilerplate files",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Braulio Barahona",
+	"license": "ISC",
+	"dependencies": {
+		"chalk": "^2.4.2",
+		"clear": "^0.1.0",
+		"figlet": "^1.2.1",
+		"inquirer": "^6.3.1",
+		"user-settings": "^0.2.0"
+	}
+}
