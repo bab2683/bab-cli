@@ -74,6 +74,8 @@ function createFilesAccordingToTemplate(templates, name, filePath, testFolder) {
 }
 
 module.exports = (args, settings) => {
+	console.log("settings in generate file", settings);
+
 	const { template_path, test_folder, base_folder } = settings;
 
 	const templatesFile = getFile(template_path, "js");
