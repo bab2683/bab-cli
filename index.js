@@ -4,7 +4,7 @@ const process = require("process");
 
 //UTILS
 const mappings = require("./mappings");
-const constants = require("./constants");
+const { COMMANDS, NAME, FLAGS } = require("./constants");
 const { logger } = require("./lib/logger");
 const {
 	getDefaultSettings,
@@ -20,16 +20,16 @@ if (userSettings.complete && process.argv.length > 2) {
 	const command = process.argv[2];
 	const commandArguments = process.argv.slice(3);
 
-	if (command === "conf") {
-		openConfiguration(commandArguments[0] === "project");
-	} else if (mappings[command]) {
-		const flags = getFlags(commandArguments);
+	const flags = getFlags(commandArguments);
 
+	if (command === COMMANDS.CONFIG) {
+		openConfiguration(flags[FLAGS.CUSTOM] !== undefined);
+	} else if (mappings[command]) {
 		const settings = getSettingsAccordingToFlag(userSettings.settings, flags);
 		const commandToExecute = require(`./commands/${mappings[command]}`);
 		commandToExecute(commandArguments, settings);
 	} else {
-		logger(`${constants.NAME}: command not found`, "yellow");
+		logger(`${NAME}: command not found`, "yellow");
 		openHelp();
 	}
 } else if (!userSettings.complete) {
