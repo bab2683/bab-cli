@@ -6,9 +6,13 @@ const FLAGS = {
 const COMMANDS = {
 	CONFIG: "config"
 };
+const SETTINGS = {
+	CUSTOM: "custom"
+};
 
 module.exports = {
 	COMMANDS,
 	FLAGS,
-	NAME
+	NAME,
+	SETTINGS
 };

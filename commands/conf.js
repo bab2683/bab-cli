@@ -3,6 +3,7 @@ const inquirer = require("inquirer");
 
 const { logger } = require("../lib/logger");
 const { saveUserSetting } = require("../lib/settings");
+const { SETTINGS } = require("../constants");
 
 const { parsedefaultSettings } = require("../lib/utils");
 
@@ -113,7 +114,7 @@ function generalPrompt({ questions, defaults, projectConfiguration, projects, pr
 			});
 			if (projectConfiguration) {
 				projects[project_name] = projectOnly;
-				saveUserSetting("projects", projects);
+				saveUserSetting(SETTINGS.CUSTOM, projects);
 			}
 
 			logger("Settings saved", "green");
@@ -128,13 +129,12 @@ module.exports = function(defaults, user, message, projectConfiguration) {
 	if (message !== "") {
 		logger(message, "magenta");
 	}
-
 	const payload = {
 		defaults,
 		projectConfiguration,
-		projects: user.projects || {}
+		projects: user[SETTINGS.CUSTOM] || {}
 	};
-	delete user.projects;
+	delete user[SETTINGS.CUSTOM];
 
 	if (projectConfiguration) {
 		inquirer.prompt(projectPrompt(payload.projects)).then(({ project, project_name }) => {
