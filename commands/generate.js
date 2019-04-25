@@ -1,12 +1,8 @@
-const {
-	createDirectory,
-	directoryExists,
-	getCurrentDirectoryBase
-} = require("../../lib/directories");
-const { createFile, getFile } = require("../../lib/files");
-const { logSeparator } = require("../../lib/logger");
-const { NAME } = require("../../constants/constants");
-const errors = require("../../lib/errors");
+const { createDirectory, directoryExists, getCurrentDirectoryBase } = require("../lib/directories");
+const { createFile, getFile } = require("../lib/files");
+const { logSeparator } = require("../lib/logger");
+const { NAME } = require("../constants/constants");
+const errors = require("../lib/errors");
 
 function parsePath(destination) {
 	const filePath = destination[0] === "/" ? destination.slice(1) : destination;

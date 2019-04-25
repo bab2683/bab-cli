@@ -2,6 +2,11 @@
 
 CLI to create custom boilerplate code
 
+## Installation
+```
+npm install -g bab-cli
+```
+
 ## Settings
 On first use the CLI will prompt a form asking you to setup the following settings
 
