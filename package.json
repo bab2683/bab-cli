@@ -1,22 +1,54 @@
 {
-	"name": "bab-cli",
-	"bin": {
-		"babcli": "./index.js"
-	},
-	"version": "1.1.0",
-	"description": "cli for creating boilerplate files",
-	"main": "index.js",
-	"author": "Braulio Barahona",
-	"license": "MIT",
-	"dependencies": {
-		"chalk": "^2.4.2",
-		"clear": "^0.1.0",
-		"figlet": "^1.2.1",
-		"inquirer": "^6.3.1",
-		"user-settings": "^0.2.0"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/bab2683/bab-cli/"
-	}
+  "name": "bab-cli",
+  "bin": {
+    "babcli": "dist/index.js"
+  },
+  "scripts": {
+    "test": "jest --config jestconfig.json",
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "version": "1.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "description": "CLI for creating boilerplate files",
+  "author": "Braulio Barahona",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bab2683/bab-cli/"
+  },
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "clear": "^0.1.0",
+    "figlet": "^1.2.1",
+    "inquirer": "^6.3.1",
+    "user-settings": "^0.2.0"
+  },
+  "devDependencies": {
+    "@types/figlet": "^1.2.0",
+    "@types/inquirer": "^6.0.1",
+    "@types/jest": "^24.0.11",
+    "@types/node": "^11.13.7",
+    "jest": "^24.7.1",
+    "prettier": "^1.17.0",
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.16.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.4.5"
+  },
+  "keywords": [
+    "CLI",
+    "Boilperplate",
+    "File creation"
+  ],
+  "files": [
+    "dist/**/*"
+  ]
 }
