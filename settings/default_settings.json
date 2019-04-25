@@ -17,7 +17,7 @@
 	},
 	"template_path": {
 		"default": "",
-		"question": "Please write down the templates file absolute path",
+		"question": "Please write down the templates file path",
 		"type": "input"
 	}
 }

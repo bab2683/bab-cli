@@ -37,7 +37,6 @@ function parsePath(destination) {
 		segments: [{ exists: directoryExists(filePath), name: filePath, segment: filePath }]
 	};
 }
-function getOptions(args) {}
 
 function parseArguments(args, baseFolder) {
 	return {
@@ -64,13 +63,13 @@ function formatName(name) {
 
 function createFilesAccordingToTemplate(templates, name, filePath, testFolder, test_folder_name) {
 	templates.forEach(current => {
-		const { filename, template, test } = current(name, formatName(name));
+		const { filename, content, test } = current(name, formatName(name));
 		createFile({
 			name:
 				test && testFolder
 					? `${filePath}/${test_folder_name}/${filename}`
 					: `${filePath}/${filename}`,
-			content: template,
+			content,
 			filename
 		});
 	});
