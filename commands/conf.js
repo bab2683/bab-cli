@@ -3,7 +3,7 @@ const inquirer = require("inquirer");
 
 const { logger } = require("../lib/logger");
 const { saveUserSetting } = require("../lib/settings");
-const { SETTINGS } = require("../constants");
+const { SETTINGS } = require("../constants/constants");
 
 const { parsedefaultSettings } = require("../lib/utils");
 
@@ -19,6 +19,17 @@ function prepareGeneralPromptQuestions(defaults, settings) {
 				};
 		}
 	}
+	function returnWhenParameterIfNeeded(defaults) {
+		if (defaults.when) {
+			return {
+				when: function({ test_folder }) {
+					return test_folder === "true";
+				}
+			};
+		}
+		return {};
+	}
+
 	function createQuestion(option) {
 		const common = {
 			default: defaults[option].default,
@@ -31,7 +42,8 @@ function prepareGeneralPromptQuestions(defaults, settings) {
 			...parseDataByType(
 				defaults[option].type,
 				settings && settings[option] ? settings[option] : defaults[option].default
-			)
+			),
+			...returnWhenParameterIfNeeded(defaults[option])
 		};
 		if (settings && settings[option] !== undefined) {
 			common.message += `(selected: ${settings[option]})`;
@@ -86,6 +98,9 @@ function projectPrompt(projects) {
 				if (value.length) {
 					if (Object.keys(projects).indexOf(value) > -1) {
 						return "There is another project with this name";
+					}
+					if (value.match(/\s+/g)) {
+						return "Spaces are not allowed";
 					}
 					return true;
 				} else {

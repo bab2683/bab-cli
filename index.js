@@ -3,8 +3,8 @@
 const process = require("process");
 
 //UTILS
-const mappings = require("./mappings");
-const { COMMANDS, NAME, FLAGS } = require("./constants");
+const mappings = require("./constants/mappings");
+const { COMMANDS, NAME, FLAGS } = require("./constants/constants");
 const { logger } = require("./lib/logger");
 const {
 	getDefaultSettings,

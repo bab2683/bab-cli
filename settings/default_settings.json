@@ -9,6 +9,12 @@
 		"question": "Create test folder",
 		"type": "bool"
 	},
+	"test_folder_name": {
+		"default": "__test__",
+		"question": "Test folder name",
+		"type": "input",
+		"when": "test_folder"
+	},
 	"template_path": {
 		"default": "",
 		"question": "Please write down the templates file absolute path",

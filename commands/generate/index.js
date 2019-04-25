@@ -4,8 +4,9 @@ const {
 	getCurrentDirectoryBase
 } = require("../../lib/directories");
 const { createFile, getFile } = require("../../lib/files");
-const { logger, logSeparator } = require("../../lib/logger");
-const { NAME } = require("../../constants");
+const { logSeparator } = require("../../lib/logger");
+const { NAME } = require("../../constants/constants");
+const errors = require("../../lib/errors");
 
 function parsePath(destination) {
 	const filePath = destination[0] === "/" ? destination.slice(1) : destination;
@@ -48,7 +49,6 @@ function prepareFolders(segments) {
 	segments.forEach(current => {
 		if (!current.exists) {
 			createDirectory(current.segment);
-			logger(`Folder created: ${current.segment}`, "green", false);
 		}
 	});
 }
@@ -62,21 +62,22 @@ function formatName(name) {
 	}, "");
 }
 
-function createFilesAccordingToTemplate(templates, name, filePath, testFolder) {
+function createFilesAccordingToTemplate(templates, name, filePath, testFolder, test_folder_name) {
 	templates.forEach(current => {
 		const { filename, template, test } = current(name, formatName(name));
-		createFile(
-			test && testFolder ? `${filePath}/__test__/${filename}` : `${filePath}/${filename}`,
-			template
-		);
-		logger(`Created file: ${filename}`, "green", false);
+		createFile({
+			name:
+				test && testFolder
+					? `${filePath}/${test_folder_name}/${filename}`
+					: `${filePath}/${filename}`,
+			content: template,
+			filename
+		});
 	});
 }
 
 module.exports = (args, settings) => {
-	console.log("settings in generate file", settings);
-
-	const { template_path, test_folder, base_folder } = settings;
+	const { template_path, test_folder, base_folder, test_folder_name } = settings;
 
 	const templatesFile = getFile(template_path, "js");
 
@@ -88,7 +89,7 @@ module.exports = (args, settings) => {
 		if (!segments[segments.length - 1].exists) {
 			prepareFolders(segments);
 			if (test_folder) {
-				createDirectory(`${segments[segments.length - 1].segment}/__test__`);
+				createDirectory(`${segments[segments.length - 1].segment}/${test_folder_name}`);
 			}
 			logSeparator();
 
@@ -97,12 +98,13 @@ module.exports = (args, settings) => {
 				templates,
 				name,
 				segments[segments.length - 1].segment,
-				test_folder
+				test_folder,
+				test_folder_name
 			);
 		} else {
-			logger("Folder already exists, operation aborted", "red");
+			errors("Folder already exists, operation aborted");
 		}
 	} else {
-		logger(`No templates file found, please correct the path by typing: ${NAME} conf`, "red");
+		errors(`No templates file found, please correct the path by typing: ${NAME} conf`);
 	}
 };
