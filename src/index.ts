@@ -14,15 +14,17 @@ import { logger } from './lib/logger';
 import { getDefaultSettings, getUserSettings, getSettingsAccordingToFlag } from './lib/settings';
 import { getFlags } from './lib/flags';
 
-async function executeSelectedCommand(commandArguments: string[], settings: UserSettings, commandPath: string) {
-  const { command } = await import(commandPath);
-  command({
-    settings,
-    commandArguments,
+function getCommand(commandPath: string): Promise<{ command: Command }> {
+  return import(commandPath);
+}
+
+function executeSelectedCommand({ payload, commandPath }: { payload?: any; commandPath: string }) {
+  getCommand(commandPath).then(({ command }) => {
+    command(payload);
   });
 }
 
-async function openConfiguration({
+function openConfiguration({
   projectConfiguration,
   message,
   user,
@@ -33,21 +35,21 @@ async function openConfiguration({
   user: UserSettings;
   defaults: DefaultSettings;
 }) {
-  const response = await import('./commands/conf');
-  const { command } = response;
-  command({
-    defaults,
-    user,
-    message,
-    projectConfiguration,
+  executeSelectedCommand({
+    payload: {
+      defaults,
+      user,
+      message,
+      projectConfiguration,
+    },
+    commandPath: './commands/conf',
   });
 }
-async function openHelp() {
-  const { command }: { command: Command } = await import('./commands/help');
-  command();
+function openHelp() {
+  executeSelectedCommand({ commandPath: './commands/help' });
 }
 
-function init() {
+function init(): void {
   const defaultSettings: DefaultSettings = getDefaultSettings();
   const userSettings: UserSettings | null = getUserSettings();
 
@@ -66,8 +68,12 @@ function init() {
           message: '',
         });
       } else if (mappings[command]) {
-        const settings: UserSettings = getSettingsAccordingToFlag(userSettings.settings, flags);
-        executeSelectedCommand(commandArguments, settings, `./commands/${mappings[command]}`);
+        const settings: UserSettings = getSettingsAccordingToFlag(userSettings, flags);
+
+        executeSelectedCommand({
+          payload: { commandArguments, settings, flags },
+          commandPath: `./commands/${mappings[command]}`,
+        });
       } else {
         logger(`${NAME}: command not found`, 'yellow');
         openHelp();

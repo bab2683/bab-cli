@@ -5,7 +5,7 @@ import { Flags } from '../models/flags';
 
 import { defaultSettings } from '../settings';
 import { COMMANDS, NAME, FLAGS, SETTINGS } from '../constants/constants';
-import { error } from './errors';
+import { logError } from './errors';
 const { get, set } = file('.babcli_settings');
 
 export function getDefaultSettings(): DefaultSettings {
@@ -28,7 +28,7 @@ export function getSettingsAccordingToFlag(userSettings: UserSettings, flags: Fl
     if (userSettings[SETTINGS.CUSTOM] && userSettings[SETTINGS.CUSTOM][flags[FLAGS.CUSTOM]]) {
       return userSettings[SETTINGS.CUSTOM][flags[FLAGS.CUSTOM]];
     }
-    error(
+    logError(
       `the custom configuration requested does not exists, to create a new configuration type: ${NAME} ${
         COMMANDS.CONFIG
       } ${FLAGS.CUSTOM}`,

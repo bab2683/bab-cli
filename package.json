@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --config jestconfig.json",
     "build": "tsc",
-    "test-build": "node dist/index.js config --custom=true",
+    "test-build": "node dist/index.js g test/bla",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
     "prepare": "npm run build",

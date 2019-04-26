@@ -5,7 +5,6 @@ import { logger } from '../lib/logger';
 import { SETTINGS } from '../constants/constants';
 
 import { saveUserSetting, parseDefaultSettings } from '../lib/settings';
-import { Command } from '../models/command';
 import { UserSettings, DefaultSettings, SettingObject } from '../models/settings';
 
 interface ConfigurationPayload {
@@ -150,13 +149,9 @@ function generalPrompt({ questions, defaults, projectConfiguration, projects, pr
 }
 
 export const command: ConfigurationPayload = (data): void => {
-  console.log('data', data);
-
   if (data) {
     const { message, defaults, user = {}, projectConfiguration } = data;
     logger(textSync('BabCli', { horizontalLayout: 'full' }), 'yellow', true, false);
-
-    console.log('user', user);
 
     if (message !== '') {
       logger(message, 'magenta');
