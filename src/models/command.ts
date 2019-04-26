@@ -7,5 +7,5 @@ export interface CommandPayload {
 }
 
 export interface Command {
-  (payload: CommandPayload): void;
+  (payload?: any): void;
 }

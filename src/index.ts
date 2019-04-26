@@ -5,7 +5,7 @@ import * as process from 'process';
 //MODELS
 import { DefaultSettings, UserSettings } from './models/settings';
 import { Flags } from './models/flags';
-import { CommandPayload, Command } from './models/command';
+import { Command } from './models/command';
 
 //UTILS
 import { mappings } from './constants/mappings';
@@ -15,7 +15,7 @@ import { getDefaultSettings, getUserSettings, getSettingsAccordingToFlag } from 
 import { getFlags } from './lib/flags';
 
 async function executeSelectedCommand(commandArguments: string[], settings: UserSettings, commandPath: string) {
-  const { command }: { command: Command } = await import(commandPath);
+  const { command } = await import(commandPath);
   command({
     settings,
     commandArguments,
@@ -33,22 +33,18 @@ async function openConfiguration({
   user: UserSettings;
   defaults: DefaultSettings;
 }) {
-  //   const confCommand: any = import('./commands/conf');
-  //   console.log(confCommand);
-  //   confCommand('./commands/conf')(defaultSettings, userSettings, message, projectConfiguration);
-  const { command }: { command: Command } = await import('./commands/conf');
+  const response = await import('./commands/conf');
+  const { command } = response;
   command({
-    settings: user,
     defaults,
-    commandArguments: [],
     user,
     message,
     projectConfiguration,
   });
 }
-async function openHelp({ user, defaults }: { user: UserSettings; defaults: DefaultSettings }) {
+async function openHelp() {
   const { command }: { command: Command } = await import('./commands/help');
-  command({});
+  command();
 }
 
 function init() {
@@ -63,7 +59,12 @@ function init() {
       const flags: Flags = getFlags(commandArguments);
 
       if (command === COMMANDS.CONFIG) {
-        openConfiguration(flags[FLAGS.CUSTOM] !== undefined);
+        openConfiguration({
+          projectConfiguration: flags[FLAGS.CUSTOM] !== undefined,
+          defaults: defaultSettings,
+          user: userSettings,
+          message: '',
+        });
       } else if (mappings[command]) {
         const settings: UserSettings = getSettingsAccordingToFlag(userSettings.settings, flags);
         executeSelectedCommand(commandArguments, settings, `./commands/${mappings[command]}`);
@@ -75,7 +76,12 @@ function init() {
       openHelp();
     }
   } else {
-    openConfiguration(false, 'It appears you have not configured the cli yet, please answer the following questions');
+    openConfiguration({
+      projectConfiguration: false,
+      message: 'It appears you have not configured the cli yet, please answer the following questions',
+      defaults: defaultSettings,
+      user: userSettings,
+    });
   }
 }
 

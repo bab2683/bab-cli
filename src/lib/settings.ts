@@ -13,13 +13,12 @@ export function getDefaultSettings(): DefaultSettings {
     ...defaultSettings,
   };
 }
-export function getUserSettings(): UserSettings | null {
-  const userSettings: UserSettings = get(SETTINGS.INITIAL);
+export function getUserSettings(): UserSettings {
+  const userSettings: UserSettings = get(SETTINGS.INITIAL) || {};
   if (userSettings) {
     userSettings[SETTINGS.CUSTOM] = get(SETTINGS.CUSTOM) || {};
-    return userSettings;
   }
-  return null;
+  return userSettings;
 }
 export function saveUserSetting(key: string, value: any): void {
   set(key, value);

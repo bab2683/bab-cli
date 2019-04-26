@@ -1,8 +1,9 @@
-interface SettingObject {
-  default: string | boolean;
-  question: string;
-  type: string;
+export interface SettingObject {
+  default?: string | boolean;
+  question?: string;
+  type?: string;
   when?: string;
+  [value: string]: any;
 }
 export interface DefaultSettings {
   base_folder: SettingObject;
