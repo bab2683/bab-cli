@@ -1,15 +1,17 @@
-import { textSync } from 'figlet';
-import { prompt, Answers, Question } from 'inquirer';
-
+import { Answers, prompt, Question } from 'inquirer';
+import { DefaultSettings, SettingObject, UserSettings } from '../models/settings';
 import { logger } from '../lib/logger';
+import { parseDefaultSettings, saveUserSetting } from '../lib/settings';
 import { SETTINGS } from '../constants/constants';
+import { textSync } from 'figlet';
 
-import { saveUserSetting, parseDefaultSettings } from '../lib/settings';
-import { UserSettings, DefaultSettings, SettingObject } from '../models/settings';
+type ConfigurationPayload = (data: {
+  message: string;
+  defaults: DefaultSettings;
+  user: UserSettings;
+  projectConfiguration: boolean;
+}) => void;
 
-interface ConfigurationPayload {
-  (data: { message: string; defaults: DefaultSettings; user: UserSettings; projectConfiguration: boolean }): void;
-}
 interface PromptSettings {
   defaults: DefaultSettings;
   projectConfiguration: boolean;
@@ -30,10 +32,10 @@ function prepareGeneralPromptQuestions(defaults: DefaultSettings, settings: User
         };
     }
   }
-  function returnWhenParameterIfNeeded(defaults: SettingObject) {
-    if (defaults.when) {
+  function returnWhenParameterIfNeeded(fieldSettings: SettingObject) {
+    if (fieldSettings.when) {
       return {
-        when: function({ test_folder }: Answers) {
+        when({ test_folder }: Answers) {
           return test_folder === 'true';
         },
       };
@@ -108,7 +110,7 @@ function projectPrompt(projects: { [value: string]: UserSettings }) {
       message: 'Project name',
       name: 'project_name',
       type: 'input',
-      validate: function(value: string) {
+      validate(value: string) {
         if (value.length) {
           if (Object.keys(projects).indexOf(value) > -1) {
             return 'There is another project with this name';
@@ -121,7 +123,7 @@ function projectPrompt(projects: { [value: string]: UserSettings }) {
           return 'Please enter a valid name';
         }
       },
-      when: function({ project }: Answers) {
+      when({ project }: Answers) {
         return project === 'New';
       },
     },

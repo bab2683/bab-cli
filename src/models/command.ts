@@ -1,3 +1,1 @@
-export interface Command {
-  (payload?: any): void;
-}
+export type Command = (payload?: any) => void;

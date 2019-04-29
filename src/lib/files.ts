@@ -1,7 +1,7 @@
+import { Error } from '../models/error';
+import { GENERIC_ERROR, MODULE_NOT_FOUND } from '../constants/errors';
 import { logger } from './logger';
 import { writeFile } from 'fs';
-import { MODULE_NOT_FOUND, GENERIC_ERROR } from '../constants/errors';
-import { Error } from '../models/error';
 
 interface FileResponse {
   data?: any;

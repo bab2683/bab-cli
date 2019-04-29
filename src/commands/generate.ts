@@ -1,12 +1,11 @@
+import { ALREADY_EXISTS } from '../constants/errors';
 import { createDirectory, directoryExists, getCurrentDirectoryBase } from '../lib/directories';
 import { createFile, getFile } from '../lib/files';
+import { Flags } from '../models/flags';
+import { handleError } from '../lib/errors';
 import { logSeparator } from '../lib/logger';
-import { NAME } from '../constants/constants';
-import { logError, handleError } from '../lib/errors';
 import { Template } from '../models/templates';
 import { UserSettings } from '../models/settings';
-import { Flags } from '../models/flags';
-import { ALREADY_EXISTS } from '../constants/errors';
 
 interface Segment {
   exists: boolean;
@@ -21,9 +20,7 @@ interface FileCreationSettings {
   currentPath?: string;
 }
 
-interface GeneratePayload {
-  (data: { commandArguments: string[]; settings: UserSettings; flags: Flags }): void;
-}
+type GeneratePayload = (data: { commandArguments: string[]; settings: UserSettings; flags: Flags }) => void;
 
 function parsePath(destination: string): FileCreationSettings {
   const filePath: string = destination[0] === '/' ? destination.slice(1) : destination;
@@ -71,10 +68,10 @@ function prepareFolders(segments: Segment[]): void {
 function formatName(name: string): string {
   const lowerCase: string = name.toLowerCase();
   const splitted: string[] = lowerCase.split('-');
-  return splitted.reduce((string: string, current: string) => {
+  return splitted.reduce((sentence: string, current: string) => {
     const firstLetter = current[0].toUpperCase();
-    const name = firstLetter + current.slice(1);
-    return (string += name);
+    const word = firstLetter + current.slice(1);
+    return (sentence += word);
   }, '');
 }
 

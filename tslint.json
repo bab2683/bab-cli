@@ -1,3 +1,11 @@
 {
-	"extends": ["tslint:recommended", "tslint-config-prettier"]
+  "extends": ["tslint:recommended", "tslint-config-prettier"],
+  "rules": {
+    "ordered-imports": [false],
+    "object-literal-sort-keys": [false],
+    "interface-name": false,
+    "array-type": [true, "array"],
+    "no-console": [true, "waring"],
+    "no-unused-expression": [true, "allow-fast-null-checks"]
+  }
 }

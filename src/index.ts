@@ -1,18 +1,13 @@
 #!/usr/bin/env node
-
 import * as process from 'process';
-
-//MODELS
+import { Command } from './models/command';
+import { COMMANDS, FLAGS, NAME } from './constants/constants';
 import { DefaultSettings, UserSettings } from './models/settings';
 import { Flags } from './models/flags';
-import { Command } from './models/command';
-
-//UTILS
-import { mappings } from './constants/mappings';
-import { COMMANDS, NAME, FLAGS } from './constants/constants';
-import { logger } from './lib/logger';
-import { getDefaultSettings, getUserSettings, getSettingsAccordingToFlag } from './lib/settings';
+import { getDefaultSettings, getSettingsAccordingToFlag, getUserSettings } from './lib/settings';
 import { getFlags } from './lib/flags';
+import { logger } from './lib/logger';
+import { mappings } from './constants/mappings';
 
 function getCommand(commandPath: string): Promise<{ command: Command }> {
   return import(commandPath);
@@ -42,7 +37,7 @@ function openConfiguration({
       message,
       projectConfiguration,
     },
-    commandPath: './commands/conf',
+    commandPath: './commands/config',
   });
 }
 function openHelp() {

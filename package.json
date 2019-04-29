@@ -4,7 +4,7 @@
     "babcli": "dist/index.js"
   },
   "scripts": {
-    "test": "jest --config jestconfig.json",
+    "test": "jest --config jestconfig.json --passWithNoTests",
     "build": "tsc",
     "test-build": "node dist/index.js g test/bla",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
