@@ -134,7 +134,7 @@ function generalPrompt({ questions, defaults, projectConfiguration, projects, pr
   prompt(questions)
     .then(answers => {
       const settingsObj: SettingObject = {};
-      parseAnswers(defaults, answers).forEach(({ name, value }) => {
+      parseAnswers(defaults, answers as Answers).forEach(({ name, value }) => {
         settingsObj[name] = value;
       });
       if (projectConfiguration && project_name) {
@@ -161,9 +161,9 @@ export const command: ConfigurationPayload = (data): void => {
     const payload: PromptSettings = {
       defaults,
       projectConfiguration,
-      projects: user[SETTINGS.CUSTOM] || {},
+      projects: user ? user[SETTINGS.CUSTOM] : {},
     };
-    delete user[SETTINGS.CUSTOM];
+    user && delete user[SETTINGS.CUSTOM];
 
     if (projectConfiguration) {
       prompt(projectPrompt(payload.projects)).then(({ project, project_name }: Answers) => {

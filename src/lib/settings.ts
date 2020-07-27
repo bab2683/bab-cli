@@ -14,7 +14,7 @@ export function getDefaultSettings(): DefaultSettings {
   };
 }
 export function getUserSettings(): UserSettings {
-  const userSettings: UserSettings = get(SETTINGS.INITIAL) || {};
+  const userSettings: UserSettings = get(SETTINGS.INITIAL) || null;
   if (userSettings) {
     userSettings[SETTINGS.CUSTOM] = get(SETTINGS.CUSTOM) || {};
   }
